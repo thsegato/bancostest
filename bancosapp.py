@@ -19,22 +19,22 @@ import time
 bancos = {
     'BBDC4.SA': {
         'empresa': 'Banco Bradesco',
-        'ticket': 'BBDC4',
+        'ticker': 'BBDC4',
         'logo_path': 'logos/bradesco.png'
     },
     'BBAS3.SA': {
         'empresa': 'Banco do Brasil',
-        'ticket': 'BBAS3',
+        'ticker': 'BBAS3',
         'logo_path': 'logos/bb.png'
     },
     'ITUB4.SA': {
         'empresa': 'Itaú Unibanco',
-        'ticket': 'ITUB4',
+        'ticker': 'ITUB4',
         'logo_path': 'logos/itau.png'
     },
     'SANB11.SA': {
         'empresa': 'Banco Santander',
-        'ticket': 'SANB11',
+        'ticker': 'SANB11',
         'logo_path': 'logos/santander.png'
     }
 }
@@ -66,7 +66,7 @@ while True:
         col1, col2, col3, col4, col5 = st.columns([1.5, 3, 2, 2, 1])
         with col1: st.markdown("**LOGO**")
         with col2: st.markdown("**EMPRESA**")
-        with col3: st.markdown("**TICKET**")
+        with col3: st.markdown("**TICKER**")
         with col4: st.markdown("**PREÇO DA AÇÃO (R$)**")
         with col5: st.markdown("**TENDÊNCIA**")
 
@@ -92,7 +92,7 @@ while True:
             with col2:
                 st.markdown(f"<div style='display:flex; align-items:center; height:100%;'>{info['empresa']}</div>", unsafe_allow_html=True)
             with col3:
-                st.markdown(f"<div style='display:flex; align-items:center; height:100%;'>{info['ticket']}</div>", unsafe_allow_html=True)
+                st.markdown(f"<div style='display:flex; align-items:center; height:100%;'>{info['ticker']}</div>", unsafe_allow_html=True)
             with col4:
                 st.markdown(f"<div style='display:flex; align-items:center; height:100%;'>R$ {preco_atual}</div>", unsafe_allow_html=True)
             with col5:
