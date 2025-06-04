@@ -18,24 +18,24 @@ import time
 # Dicionário com dados dos bancos
 bancos = {
     'BBDC4.SA': {
-        'empresa': 'Banco Bradesco',
+        'empresa': 'Bradesco',
         'ticket': 'BBDC4',
-        'logo_url': 'https://upload.wikimedia.org/wikipedia/commons/6/6c/Banco_Bradesco_logo.svg'
+        'logo_path': 'logos/bradesco.png'
     },
     'BBAS3.SA': {
         'empresa': 'Banco do Brasil',
         'ticket': 'BBAS3',
-        'logo_url': 'https://logodownload.org/wp-content/uploads/2014/12/banco-do-brasil-logo-1.png'
+        'logo_path': 'logos/bb.png'
     },
     'ITUB4.SA': {
         'empresa': 'Itaú Unibanco',
         'ticket': 'ITUB4',
-        'logo_url': 'https://logodownload.org/wp-content/uploads/2014/09/itau-logo-1.png'
+        'logo_path': 'logos/itau.png'
     },
     'SANB11.SA': {
-        'empresa': 'Banco Santander',
+        'empresa': 'Santander',
         'ticket': 'SANB11',
-        'logo_url': 'https://logodownload.org/wp-content/uploads/2014/10/santander-logo-1.png'
+        'logo_path': 'logos/santander.png'
     }
 }
 
