@@ -56,11 +56,17 @@ refresh_interval = st.slider("⏱️ Atualizar a cada quantos segundos?", min_va
 
 # Cabeçalho da tabela com nova coluna "TENDÊNCIA"
 col1, col2, col3, col4, col5 = st.columns([1.5, 3, 2, 2, 1])
-with col1: st.markdown("**LOGO**")
-with col2: st.markdown("**EMPRESA**")
-with col3: st.markdown("**TICKET**")
-with col4: st.markdown("**PREÇO DA AÇÃO (R$)**")
-with col5: st.markdown("**TENDÊNCIA**")
+
+with col1:
+    st.markdown("**LOGO**")
+with col2:
+    st.markdown("**EMPRESA**")
+with col3:
+    st.markdown("**TICKET**")
+with col4:
+    st.markdown("**PREÇO DA AÇÃO (R$)**")
+with col5:
+    st.markdown("**TENDÊNCIA**")
 
 # Dicionário para guardar o último preço conhecido
 precos_anteriores = {ticker: None for ticker in bancos.keys()}
