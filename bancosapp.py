@@ -67,14 +67,7 @@ for ticker, info in bancos.items():
 
     col1, col2, col3, col4 = st.columns([1.5, 3, 2, 2])
     with col1:
-        st.markdown(
-                    f"""
-                    <div style='display:flex; justify-content:center; align-items:center; height:80px;'>
-                        <img src="data:image/png;base64,{Image.open(info['logo_path']).resize((60,60)).tobytes().hex()}" width="60"/>
-                    </div>
-                    """,
-                    unsafe_allow_html=True)
-                st.image(info["logo_path"], width=60)
+        st.image(info["logo_path"], width=100)
     with col2:
         st.write(info["empresa"])
     with col3:
