@@ -20,7 +20,7 @@ bancos = {
     'BBDC4.SA': {
         'empresa': 'Bradesco',
         'ticket': 'BBDC4',
-        'logo_url': 'https://logodownload.org/wp-content/uploads/2014/10/bradesco-logo-3.png'
+        'logo_url': 'https://logodownload.org/wp-content/uploads/2018/09/bradesco-logo-novo-2018.png'
     },
     'BBAS3.SA': {
         'empresa': 'Banco do Brasil',
