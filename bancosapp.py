@@ -56,28 +56,23 @@ refresh_interval = st.slider("⏱️ Atualizar a cada quantos segundos?", min_va
 
 # Cabeçalho da tabela
 col1, col2, col3, col4 = st.columns([1.5, 3, 2, 2])
-with col1: st.markdown("<div style='text-align: center; font-weight: bold;'>LOGO</div>", unsafe_allow_html=True)
-with col2: st.markdown("<div style='text-align: center; font-weight: bold;'>EMPRESA</div>", unsafe_allow_html=True)
-with col3: st.markdown("<div style='text-align: center; font-weight: bold;'>TICKET</div>", unsafe_allow_html=True)
-with col4: st.markdown("<div style='text-align: center; font-weight: bold;'>PREÇO DA AÇÃO (R$)</div>", unsafe_allow_html=True)
+with col1: st.markdown("**LOGO**")
+with col2: st.markdown("**EMPRESA**")
+with col3: st.markdown("**TICKET**")
+with col4: st.markdown("**PREÇO DA AÇÃO (R$)**")
 
-while True:
-    for ticker, info in bancos.items():
-        preco = buscar_preco(ticker)
+# Linhas
+for ticker, info in bancos.items():
+    preco = buscar_preco(ticker)
 
-        col1, col2, col3, col4 = st.columns([1.5, 3, 2, 2])
-        with col1:
-            st.markdown(f"<div style='text-align: center;'><img src='data:image/png;base64,{Image.open(info['logo_path']).resize((100, 100)).tobytes().hex()}' width='80'></div>", unsafe_allow_html=True)
-            st.image(info["logo_path"], width=80)
-        with col2:
-            st.markdown(f"<div style='text-align: center;'>{info['empresa']}</div>", unsafe_allow_html=True)
-        with col3:
-            st.markdown(f"<div style='text-align: center;'>{info['ticket']}</div>", unsafe_allow_html=True)
-        with col4:
-            st.markdown(f"<div style='text-align: center;'>R$ {preco}</div>", unsafe_allow_html=True)
-
-        # Espaçamento entre linhas
-        st.markdown("<br>", unsafe_allow_html=True)
+    col1, col2, col3, col4 = st.columns([1.5, 3, 2, 2])
+    with col1:
+        st.image(info["logo_path"], width=100)
+    with col2:
+        st.write(info["empresa"])
+    with col3:
+        st.write(info["ticket"])
+    with col4:
+        st.write(f"R$ {preco}")
 
     time.sleep(refresh_interval)
-    st.rerun()
