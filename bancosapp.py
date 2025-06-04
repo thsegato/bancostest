@@ -61,20 +61,33 @@ with col2: st.markdown("**EMPRESA**")
 with col3: st.markdown("**TICKET**")
 with col4: st.markdown("**PREÇO DA AÇÃO (R$)**")
 
-# Linhas — com espaçamento vertical entre elas
 for ticker, info in bancos.items():
     preco = buscar_preco(ticker)
 
-    col1, col2, col3, col4 = st.columns([1.5, 3, 2, 2])
-    with col1:
-        st.image(info["logo_path"], width=100)
-    with col2:
-        st.write(info["empresa"])
-    with col3:
-        st.write(info["ticket"])
-    with col4:
-        st.write(f"R$ {preco}")
-    
+    # converter logo para base64 para embutir no HTML
+    img_base64 = img_to_base64(info["logo_path"])
+
+    linha_html = f"""
+    <div style='
+        display: flex; 
+        align-items: center; 
+        gap: 20px; 
+        height: 120px; 
+        border-bottom: 1px solid #ddd;
+        padding: 10px 0;
+    '>
+        <div style='flex: 1.5; display: flex; justify-content: center;'>
+            <img src="data:image/png;base64,{img_base64}" width="100" />
+        </div>
+        <div style='flex: 3; display: flex; align-items: center; justify-content: center; font-weight: 600;'>{info["empresa"]}</div>
+        <div style='flex: 2; display: flex; align-items: center; justify-content: center; font-weight: 600;'>{info["ticket"]}</div>
+        <div style='flex: 2; display: flex; align-items: center; justify-content: center; font-weight: 600;'>R$ {preco}</div>
+    </div>
+    """
+
+    st.markdown(linha_html, unsafe_allow_html=True)
+
+    time.sleep(refresh_interval)
     st.markdown("<br>", unsafe_allow_html=True)  # espaçamento extra entre linhas, só aqui
     # ou use st.write("") para um espaço simples, se preferir
 
