@@ -20,12 +20,12 @@ bancos = {
     'BBDC4.SA': {
         'empresa': 'Bradesco',
         'ticket': 'BBDC4',
-        'logo_url': 'https://logospng.org/wp-content/uploads/bradesco.jpg'
+        'logo_path': 'logos/bradesco.png'
     },
     'BBAS3.SA': {
         'empresa': 'Banco do Brasil',
         'ticket': 'BBAS3',
-        'logo_url': 'https://logodownload.org/wp-content/uploads/2014/12/banco-do-brasil-logo-1.png'
+        'logo_path': 'logos/bb.png'
     },
     'ITUB4.SA': {
         'empresa': 'Itaú Unibanco',
