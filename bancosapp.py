@@ -49,7 +49,7 @@ def get_preco_acao(ticker):
 st.set_page_config(page_title="Preços em tempo real - Bancos", layout="wide")
 st.title("📊 Preço em Tempo Real das Ações - Bancos B3")
 
-refresh_interval = st.slider("⏱️ Atualizar a cada quantos segundos?", min_value=5, max_value=60, value=10)
+refresh_interval = st.slider("⏱️ Atualizar a cada quantos segundos?", min_value=2, max_value=60, value=10)
 
 # Atualização em tempo real
 placeholder = st.empty()
