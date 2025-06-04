@@ -20,22 +20,22 @@ bancos = {
     'BBDC4.SA': {
         'empresa': 'Banco Bradesco',
         'ticket': 'BBDC4',
-        'logo_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Bradesco_logo.svg/2560px-Bradesco_logo.svg.png'
+        'logo_url': 'https://upload.wikimedia.org/wikipedia/commons/6/6c/Banco_Bradesco_logo.svg'
     },
     'BBAS3.SA': {
         'empresa': 'Banco do Brasil',
         'ticket': 'BBAS3',
-        'logo_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Banco_do_Brasil_logo.svg/2560px-Banco_do_Brasil_logo.svg.png'
+        'logo_url': 'https://logodownload.org/wp-content/uploads/2014/12/banco-do-brasil-logo-1.png'
     },
     'ITUB4.SA': {
         'empresa': 'Itaú Unibanco',
         'ticket': 'ITUB4',
-        'logo_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Itau_logo.svg/2560px-Itau_logo.svg.png'
+        'logo_url': 'https://logodownload.org/wp-content/uploads/2014/09/itau-logo-1.png'
     },
     'SANB11.SA': {
         'empresa': 'Banco Santander',
         'ticket': 'SANB11',
-        'logo_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Logo_Banco_Santander.svg/2560px-Logo_Banco_Santander.svg.png'
+        'logo_url': 'https://logodownload.org/wp-content/uploads/2014/10/santander-logo-1.png'
     }
 }
 
@@ -51,33 +51,26 @@ st.title("📊 Preço em Tempo Real das Ações - Bancos B3")
 
 refresh_interval = st.slider("⏱️ Atualizar a cada quantos segundos?", min_value=5, max_value=60, value=10)
 
-# Mostrar logos e informações fixas
-st.subheader("🏦 Bancos e Informações Fixas")
-info_cols = st.columns(len(bancos))
-for i, (ticker, info) in enumerate(bancos.items()):
-    with info_cols[i]:
-        st.image(info['logo_url'], width=80)
-        st.markdown(f"**{info['empresa']}**")
-        st.markdown(f"🎫 **{info['ticket']}**")
+# Atualização em tempo real
+placeholder = st.empty()
 
-# Espaço reservado para preços (dinâmico)
-st.subheader("💸 Preços em Tempo Real")
-preco_placeholder = st.empty()
-
-# Atualização contínua dos preços (apenas a parte dinâmica)
 while True:
-    with preco_placeholder.container():
+    with placeholder.container():
         cols = st.columns(len(bancos))
         for i, (ticker, info) in enumerate(bancos.items()):
             with cols[i]:
-                preco = "N/A"
+                # Logo
                 try:
-                    stock = yf.Ticker(ticker)
-                    data = stock.history(period="1d", interval="1m")
-                    if not data.empty:
-                        preco = round(data["Close"].iloc[-1], 2)
+                    response = requests.get(info["logo_url"])
+                    img = Image.open(BytesIO(response.content))
+                    st.image(img, width=100)
                 except:
-                    pass
-                st.metric(label=f"{info['ticket']}", value=f"R$ {preco}")
-    st.caption(f"🔁 Atualizando novamente em {refresh_interval} segundos...")
+                    st.text("Logo não disponível")
+
+                st.markdown(f"**{info['empresa']}**")
+                st.markdown(f"🎫 **{info['ticket']}**")
+
+                preco = get_preco_acao(ticker)
+                st.metric(label="Preço da Ação (R$)", value=preco)
+
     time.sleep(refresh_interval)
