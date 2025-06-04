@@ -63,16 +63,20 @@ with col4: st.markdown("<div style='text-align: center; font-weight: bold;'>PRE√
 
 # Linhas
 for ticker, info in bancos.items():
-    preco = buscar_preco(ticker)
+        preco = buscar_preco(ticker)
 
-    col1, col2, col3, col4 = st.columns([1.5, 3, 2, 2])
-    with col1:
-        st.image(info["logo_path"], width=100)
-    with col2:
-        st.write(info["empresa"])
-    with col3:
-        st.write(info["ticket"])
-    with col4:
-        st.write(f"R$ {preco}")
+        col1, col2, col3, col4 = st.columns([1.5, 3, 2, 2])
+        with col1:
+            st.markdown(f"<div style='text-align: center;'><img src='data:image/png;base64,{Image.open(info['logo_path']).resize((100, 100)).tobytes().hex()}' width='80'></div>", unsafe_allow_html=True)
+            st.image(info["logo_path"], width=80)
+        with col2:
+            st.markdown(f"<div style='text-align: center;'>{info['empresa']}</div>", unsafe_allow_html=True)
+        with col3:
+            st.markdown(f"<div style='text-align: center;'>{info['ticket']}</div>", unsafe_allow_html=True)
+        with col4:
+            st.markdown(f"<div style='text-align: center;'>R$ {preco}</div>", unsafe_allow_html=True)
+
+        # Espa√ßamento entre linhas
+        st.markdown("<br>", unsafe_allow_html=True)
 
     time.sleep(refresh_interval)
