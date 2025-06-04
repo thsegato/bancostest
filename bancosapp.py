@@ -20,22 +20,22 @@ bancos = {
     'BBDC4.SA': {
         'empresa': 'Banco Bradesco',
         'ticket': 'BBDC4',
-        'logo_path': os.path.join(LOGO_PATH, 'bradesco.png')
+        'logo_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Bradesco_logo.svg/2560px-Bradesco_logo.svg.png'
     },
     'BBAS3.SA': {
         'empresa': 'Banco do Brasil',
         'ticket': 'BBAS3',
-        'logo_path': os.path.join(LOGO_PATH, 'bb.png')
+        'logo_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Banco_do_Brasil_logo.svg/2560px-Banco_do_Brasil_logo.svg.png'
     },
     'ITUB4.SA': {
         'empresa': 'Itaú Unibanco',
         'ticket': 'ITUB4',
-        'logo_path': os.path.join(LOGO_PATH, 'itau.png')
+        'logo_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Itau_logo.svg/2560px-Itau_logo.svg.png'
     },
     'SANB11.SA': {
         'empresa': 'Banco Santander',
         'ticket': 'SANB11',
-        'logo_path': os.path.join(LOGO_PATH, 'santander.png')
+        'logo_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Logo_Banco_Santander.svg/2560px-Logo_Banco_Santander.svg.png'
     }
 }
 
