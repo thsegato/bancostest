@@ -56,10 +56,10 @@ refresh_interval = st.slider("⏱️ Atualizar a cada quantos segundos?", min_va
 
 # Cabeçalho da tabela
 col1, col2, col3, col4 = st.columns([1.5, 3, 2, 2])
-with col1: st.markdown("**LOGO**")
-with col2: st.markdown("**EMPRESA**")
-with col3: st.markdown("**TICKET**")
-with col4: st.markdown("**PREÇO DA AÇÃO (R$)**")
+with col1: st.markdown("<div style='text-align: center; font-weight: bold;'>LOGO</div>", unsafe_allow_html=True)
+with col2: st.markdown("<div style='text-align: center; font-weight: bold;'>EMPRESA</div>", unsafe_allow_html=True)
+with col3: st.markdown("<div style='text-align: center; font-weight: bold;'>TICKET</div>", unsafe_allow_html=True)
+with col4: st.markdown("<div style='text-align: center; font-weight: bold;'>PREÇO DA AÇÃO (R$)</div>", unsafe_allow_html=True)
 
 # Linhas
 for ticker, info in bancos.items():
