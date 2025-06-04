@@ -51,26 +51,33 @@ st.title("📊 Preço em Tempo Real das Ações - Bancos B3")
 
 refresh_interval = st.slider("⏱️ Atualizar a cada quantos segundos?", min_value=5, max_value=60, value=10)
 
-# Atualização em tempo real
-placeholder = st.empty()
+# Mostrar logos e informações fixas
+st.subheader("🏦 Bancos e Informações Fixas")
+info_cols = st.columns(len(bancos))
+for i, (ticker, info) in enumerate(bancos.items()):
+    with info_cols[i]:
+        st.image(info['logo_url'], width=80)
+        st.markdown(f"**{info['empresa']}**")
+        st.markdown(f"🎫 **{info['ticket']}**")
 
+# Espaço reservado para preços (dinâmico)
+st.subheader("💸 Preços em Tempo Real")
+preco_placeholder = st.empty()
+
+# Atualização contínua dos preços (apenas a parte dinâmica)
 while True:
-    with placeholder.container():
+    with preco_placeholder.container():
         cols = st.columns(len(bancos))
         for i, (ticker, info) in enumerate(bancos.items()):
             with cols[i]:
-                # Logo
+                preco = "N/A"
                 try:
-                    response = requests.get(info["logo_url"])
-                    img = Image.open(BytesIO(response.content))
-                    st.image(img, width=100)
+                    stock = yf.Ticker(ticker)
+                    data = stock.history(period="1d", interval="1m")
+                    if not data.empty:
+                        preco = round(data["Close"].iloc[-1], 2)
                 except:
-                    st.text("Logo não disponível")
-
-                st.markdown(f"**{info['empresa']}**")
-                st.markdown(f"🎫 **{info['ticket']}**")
-
-                preco = get_preco_acao(ticker)
-                st.metric(label="Preço da Ação (R$)", value=preco)
-
+                    pass
+                st.metric(label=f"{info['ticket']}", value=f"R$ {preco}")
+    st.caption(f"🔁 Atualizando novamente em {refresh_interval} segundos...")
     time.sleep(refresh_interval)
