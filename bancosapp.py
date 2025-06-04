@@ -20,7 +20,7 @@ bancos = {
     'BBDC4.SA': {
         'empresa': 'Bradesco',
         'ticket': 'BBDC4',
-        'logo_path': 'logos/bradesco.png'
+        'logo_path': os.path.join(LOGO_PATH, 'bradesco.png')
     },
     'BBAS3.SA': {
         'empresa': 'Banco do Brasil',
