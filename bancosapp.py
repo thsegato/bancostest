@@ -39,11 +39,14 @@ bancos = {
     }
 }
 
-def get_preco_acao(ticker):
-    stock = yf.Ticker(ticker)
-    info = stock.history(period="1d", interval="1m")
-    if not info.empty:
-        return round(info["Close"].iloc[-1], 2)
+def buscar_preco(ticker):
+    try:
+        stock = yf.Ticker(ticker)
+        hist = stock.history(period="1d", interval="1m")
+        if not hist.empty:
+            return round(hist["Close"].iloc[-1], 2)
+    except:
+        pass
     return "N/A"
 
 st.set_page_config(page_title="Preços em tempo real - Bancos", layout="wide")
