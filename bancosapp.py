@@ -18,7 +18,7 @@ import time
 # Dicionário com dados dos bancos
 bancos = {
     'BBDC4.SA': {
-        'empresa': 'Bradesco',
+        'empresa': 'Banco Bradesco',
         'ticket': 'BBDC4',
         'logo_path': 'logos/bradesco.png'
     },
@@ -33,7 +33,7 @@ bancos = {
         'logo_path': 'logos/itau.png'
     },
     'SANB11.SA': {
-        'empresa': 'Santander',
+        'empresa': 'Banco Santander',
         'ticket': 'SANB11',
         'logo_path': 'logos/santander.png'
     }
