@@ -54,53 +54,28 @@ st.title("📊 Preço em Tempo Real das Ações - Bancos B3")
 
 refresh_interval = st.slider("⏱️ Atualizar a cada quantos segundos?", min_value=1, max_value=60, value=1)
 
-# Cabeçalho da tabela com nova coluna "TENDÊNCIA"
-col1, col2, col3, col4, col5 = st.columns([1.5, 3, 2, 2, 1])
+# Cabeçalho da tabela
+col1, col2, col3, col4 = st.columns([1.5, 3, 2, 2])
+with col1: st.markdown("**LOGO**")
+with col2: st.markdown("**EMPRESA**")
+with col3: st.markdown("**TICKET**")
+with col4: st.markdown("**PREÇO DA AÇÃO (R$)**")
 
-with col1:
-    st.markdown("**LOGO**")
-with col2:
-    st.markdown("**EMPRESA**")
-with col3:
-    st.markdown("**TICKET**")
-with col4:
-    st.markdown("**PREÇO DA AÇÃO (R$)**")
-with col5:
-    st.markdown("**TENDÊNCIA**")
+# Linhas — com espaçamento vertical entre elas
+for ticker, info in bancos.items():
+    preco = buscar_preco(ticker)
 
-# Dicionário para guardar o último preço conhecido
-precos_anteriores = {ticker: None for ticker in bancos.keys()}
-
-while True:
-    for ticker, info in bancos.items():
-        preco_atual = buscar_preco(ticker)
-        preco_ant = precos_anteriores[ticker]
-
-        # Decide o emoji de tendência
-        if preco_ant is None or preco_atual == "N/A" or preco_ant == "N/A":
-            tendencia = ""
-        elif preco_atual > preco_ant:
-            tendencia = "🔺"
-        elif preco_atual < preco_ant:
-            tendencia = "🔻"
-        else:
-            tendencia = ""
-
-        # Atualiza o preço anterior
-        precos_anteriores[ticker] = preco_atual
-
-        # Exibe as colunas com os dados, alinhando verticalmente
-        col1, col2, col3, col4, col5 = st.columns([1.5, 3, 2, 2, 1])
-        with col1:
-            st.image(info["logo_path"], width=100)
-        with col2:
-            st.markdown(f"<div style='display:flex; align-items:center; height:100%;'>{info['empresa']}</div>", unsafe_allow_html=True)
-        with col3:
-            st.markdown(f"<div style='display:flex; align-items:center; height:100%;'>{info['ticket']}</div>", unsafe_allow_html=True)
-        with col4:
-            st.markdown(f"<div style='display:flex; align-items:center; height:100%;'>R$ {preco_atual}</div>", unsafe_allow_html=True)
-        with col5:
-            st.markdown(f"<div style='display:flex; align-items:center; height:100%; font-size:24px;'>{tendencia}</div>", unsafe_allow_html=True)
+    col1, col2, col3, col4 = st.columns([1.5, 3, 2, 2])
+    with col1:
+        st.image(info["logo_path"], width=100)
+    with col2:
+        st.write(info["empresa"])
+    with col3:
+        st.write(info["ticket"])
+    with col4:
+        st.write(f"R$ {preco}")
+    
+    st.markdown("<br>", unsafe_allow_html=True)  # espaçamento extra entre linhas, só aqui
+    # ou use st.write("") para um espaço simples, se preferir
 
     time.sleep(refresh_interval)
-    st.experimental_rerun()  # reinicia o app para atualizar a tabela
