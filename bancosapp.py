@@ -52,7 +52,7 @@ def buscar_preco(ticker):
 st.set_page_config(page_title="Preços em tempo real - Bancos", layout="wide")
 st.title("📊 Preço em Tempo Real das Ações - Bancos B3")
 
-refresh_interval = st.slider("⏱️ Atualizar a cada quantos segundos?", min_value=1, max_value=60, value=2)
+refresh_interval = st.slider("⏱️ Atualizar a cada quantos segundos?", min_value=1, max_value=60, value=1)
 
 # Cabeçalho da tabela
 col1, col2, col3, col4 = st.columns([1.5, 3, 2, 2])
