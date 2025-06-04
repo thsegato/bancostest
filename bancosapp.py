@@ -7,15 +7,19 @@ Original file is located at
     https://colab.research.google.com/drive/1ZftL7qKlkxNAimQTF4tQpmGrIpw7Xx5n
 """
 
+import os
 import streamlit as st
 import yfinance as yf
-import pandas as pd
 from PIL import Image
-import requests
-from io import BytesIO
 import time
 
-# Dicionário com dados dos bancos
+st.set_page_config(page_title="Ações dos Bancos - B3", layout="wide")
+st.title("📊 Acompanhamento em Tempo Real das Ações dos Bancos na B3")
+
+# Caminho absoluto para a pasta logos
+LOGO_PATH = os.path.join(os.path.dirname(__file__), "logos")
+
+# Dados dos bancos
 bancos = {
     'BBDC4.SA': {
         'empresa': 'Bradesco',
@@ -25,52 +29,59 @@ bancos = {
     'BBAS3.SA': {
         'empresa': 'Banco do Brasil',
         'ticket': 'BBAS3',
-        'logo_path': 'logos/bb.png'
+        'logo_path': os.path.join(LOGO_PATH, 'bb.png')
     },
     'ITUB4.SA': {
         'empresa': 'Itaú Unibanco',
         'ticket': 'ITUB4',
-        'logo_url': 'https://logodownload.org/wp-content/uploads/2014/09/itau-logo-1.png'
+        'logo_path': os.path.join(LOGO_PATH, 'itau.png')
     },
     'SANB11.SA': {
         'empresa': 'Santander',
         'ticket': 'SANB11',
-        'logo_url': 'https://logodownload.org/wp-content/uploads/2014/10/santander-logo-1.png'
+        'logo_path': os.path.join(LOGO_PATH, 'santander.png')
     }
 }
 
-def get_preco_acao(ticker):
-    stock = yf.Ticker(ticker)
-    info = stock.history(period="1d", interval="1m")
-    if not info.empty:
-        return round(info["Close"].iloc[-1], 2)
-    return "N/A"
+# Função para buscar o preço da ação
+def buscar_preco(ticker):
+    acao = yf.Ticker(ticker)
+    dados = acao.history(period="1d", interval="1m")
+    if not dados.empty:
+        return round(dados['Close'].iloc[-1], 2)
+    else:
+        return "N/A"
 
-st.set_page_config(page_title="Preços em tempo real - Bancos", layout="wide")
-st.title("📊 Preço em Tempo Real das Ações - Bancos B3")
+# Cabeçalho da tabela
+col1, col2, col3, col4 = st.columns([1.5, 3, 2, 2])
+with col1: st.markdown("**LOGO**")
+with col2: st.markdown("**EMPRESA**")
+with col3: st.markdown("**TICKET**")
+with col4: st.markdown("**PREÇO DA AÇÃO (R$)**")
 
-refresh_interval = st.slider("⏱️ Atualizar a cada quantos segundos?", min_value=5, max_value=60, value=10)
+# Linhas da tabela
+for ticker, info in bancos.items():
+    preco = buscar_preco(ticker)
+    col1, col2, col3, col4 = st.columns([1.5, 3, 2, 2])
 
-# Atualização em tempo real
-placeholder = st.empty()
+    try:
+        img = Image.open(info["logo_path"])
+        with col1:
+            st.image(img, width=70)
+    except Exception as e:
+        with col1:
+            st.write("❌ Logo não encontrada")
+            st.caption(str(e))
 
-while True:
-    with placeholder.container():
-        cols = st.columns(len(bancos))
-        for i, (ticker, info) in enumerate(bancos.items()):
-            with cols[i]:
-                # Logo
-                try:
-                    response = requests.get(info["logo_url"])
-                    img = Image.open(BytesIO(response.content))
-                    st.image(img, width=100)
-                except:
-                    st.text("Logo não disponível")
+    with col2:
+        st.write(info["empresa"])
+    with col3:
+        st.write(info["ticket"])
+    with col4:
+        st.write(f"R$ {preco}")
 
-                st.markdown(f"**{info['empresa']}**")
-                st.markdown(f"🎫 **{info['ticket']}**")
-
-                preco = get_preco_acao(ticker)
-                st.metric(label="Preço da Ação (R$)", value=preco)
-
-    time.sleep(refresh_interval)
+# Atualização automática
+st.markdown("---")
+st.caption("Atualiza automaticamente a cada 30 segundos.")
+time.sleep(30)
+st.rerun()
