@@ -54,46 +54,25 @@ st.title("📊 Preço em Tempo Real das Ações - Bancos B3")
 
 refresh_interval = st.slider("⏱️ Atualizar a cada quantos segundos?", min_value=1, max_value=60, value=10)
 
-placeholder = st.empty()
-
-# Cabeçalho
+# Cabeçalho da tabela
 col1, col2, col3, col4 = st.columns([1.5, 3, 2, 2])
 with col1: st.markdown("**LOGO**")
 with col2: st.markdown("**EMPRESA**")
 with col3: st.markdown("**TICKET**")
 with col4: st.markdown("**PREÇO DA AÇÃO (R$)**")
 
-st.markdown("---")
+# Linhas
+for ticker, info in bancos.items():
+    preco = buscar_preco(ticker)
 
-while True:
-    with placeholder.container():
-        for ticker, info in bancos.items():
-            preco = buscar_preco(ticker)
-            img_b64 = img_to_base64(info['logo_path'])
+    col1, col2, col3, col4 = st.columns([1.5, 3, 2, 2])
+    with col1:
+        st.image(info["logo_path"], width=100)
+    with col2:
+        st.write(info["empresa"])
+    with col3:
+        st.write(info["ticket"])
+    with col4:
+        st.write(f"R$ {preco}")
 
-            # Linha inteira com flexbox e altura fixa 80px
-            linha_html = f"""
-            <div style="
-                display:flex; 
-                align-items:center; 
-                justify-content:space-around; 
-                height:80px; 
-                border-bottom:1px solid #eee;
-                ">
-                
-                <div style="flex:1; text-align:center;">
-                    <img src="data:image/png;base64,{img_b64}" width="60" style="vertical-align:middle;"/>
-                </div>
-                <div style="flex:2; text-align:center; font-weight:600;">
-                    {info['empresa']}
-                </div>
-                <div style="flex:1; text-align:center;">
-                    {info['ticket']}
-                </div>
-                <div style="flex:1; text-align:center;">
-                    R$ {preco}
-                </div>
-            </div>
-            """
-            st.markdown(linha_html, unsafe_allow_html=True)
     time.sleep(refresh_interval)
