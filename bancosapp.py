@@ -51,6 +51,12 @@ def buscar_preco(ticker):
         pass
     return "N/A"
 
+def img_to_base64(path):
+    if not os.path.isfile(path):
+        return None
+    with open(path, "rb") as f:
+        return base64.b64encode(f.read()).decode()
+
 st.set_page_config(page_title="Preços em tempo real - Bancos", layout="wide")
 st.title("📊 Preço em Tempo Real das Ações - Bancos B3")
 
