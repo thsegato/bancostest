@@ -58,7 +58,7 @@ placeholder = st.empty()
 
 while True:
     with placeholder.container():
-        # Cabeçalho - normal, sem alteração
+        # Cabeçalho normal
         col1, col2, col3, col4 = st.columns([2, 3, 2, 3])
         with col1: st.markdown("**LOGO**")
         with col2: st.markdown("**EMPRESA**")
@@ -67,48 +67,23 @@ while True:
 
         st.markdown("---")
 
-        # Linhas
         for ticker, info in bancos.items():
             preco = buscar_preco(ticker)
             cols = st.columns([2, 3, 2, 3])
-            # Logo com imagem do arquivo
+
             with cols[0]:
-                st.markdown(
-                    f"""
-                    <div style="height:80px; display:flex; justify-content:center; align-items:center;">
-                        <img src="{info['logo_path']}" width="60" />
-                    </div>
-                    """,
-                    unsafe_allow_html=True
-                )
-            # Empresa centralizada
-            with cols[1]:
-                st.markdown(
-                    f"""
-                    <div style="height:80px; display:flex; justify-content:center; align-items:center;">
-                        {info['empresa']}
-                    </div>
-                    """,
-                    unsafe_allow_html=True
-                )
-            # Ticket centralizado
-            with cols[2]:
-                st.markdown(
-                    f"""
-                    <div style="height:80px; display:flex; justify-content:center; align-items:center;">
-                        {info['ticket']}
-                    </div>
-                    """,
-                    unsafe_allow_html=True
-                )
-            # Preço centralizado
-            with cols[3]:
-                st.markdown(
-                    f"""
-                    <div style="height:80px; display:flex; justify-content:center; align-items:center;">
-                        R$ {preco}
-                    </div>
-                    """,
-                    unsafe_allow_html=True
-                )
+                # Logo com st.image (centraliza horizontalmente)
+                st.image(info['logo_path'], width=60, use_column_width=False)
+
+            # Nas outras colunas: usar div com flex para centralizar e fixar altura
+            for idx, valor in zip([1, 2, 3], [info['empresa'], info['ticket'], f"R$ {preco}"]):
+                with cols[idx]:
+                    st.markdown(
+                        f"""
+                        <div style="height:80px; display:flex; justify-content:center; align-items:center;">
+                            {valor}
+                        </div>
+                        """,
+                        unsafe_allow_html=True
+                    )
     time.sleep(refresh_interval)
