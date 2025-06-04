@@ -61,7 +61,7 @@ with col2: st.markdown("**EMPRESA**")
 with col3: st.markdown("**TICKET**")
 with col4: st.markdown("**PREÇO DA AÇÃO (R$)**")
 
-# Linhas
+# Linhas — com espaçamento vertical entre elas
 for ticker, info in bancos.items():
     preco = buscar_preco(ticker)
 
@@ -74,5 +74,8 @@ for ticker, info in bancos.items():
         st.write(info["ticket"])
     with col4:
         st.write(f"R$ {preco}")
+    
+    st.markdown("<br>", unsafe_allow_html=True)  # espaçamento extra entre linhas, só aqui
+    # ou use st.write("") para um espaço simples, se preferir
 
     time.sleep(refresh_interval)
