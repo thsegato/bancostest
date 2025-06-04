@@ -61,8 +61,8 @@ with col2: st.markdown("<div style='text-align: center; font-weight: bold;'>EMPR
 with col3: st.markdown("<div style='text-align: center; font-weight: bold;'>TICKET</div>", unsafe_allow_html=True)
 with col4: st.markdown("<div style='text-align: center; font-weight: bold;'>PREÇO DA AÇÃO (R$)</div>", unsafe_allow_html=True)
 
-# Linhas
-for ticker, info in bancos.items():
+while True:
+    for ticker, info in bancos.items():
         preco = buscar_preco(ticker)
 
         col1, col2, col3, col4 = st.columns([1.5, 3, 2, 2])
@@ -80,3 +80,4 @@ for ticker, info in bancos.items():
         st.markdown("<br>", unsafe_allow_html=True)
 
     time.sleep(refresh_interval)
+    st.rerun()
