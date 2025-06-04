@@ -67,7 +67,7 @@ for ticker, info in bancos.items():
 
     col1, col2, col3, col4 = st.columns([1.5, 3, 2, 2])
     with col1:
-        st.image(info["logo_path"], width=100)
+        st.image(info["logo_path"], width=80)
     with col2:
         st.write(info["empresa"])
     with col3:
