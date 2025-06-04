@@ -73,7 +73,7 @@ while True:
 
             with cols[0]:
                 # Logo com st.image (centraliza horizontalmente)
-                st.image(info['logo_path'], width=60, use_column_width=False)
+                st.image(info['logo_path'], width=60, use_container_width=False)
 
             # Nas outras colunas: usar div com flex para centralizar e fixar altura
             for idx, valor in zip([1, 2, 3], [info['empresa'], info['ticket'], f"R$ {preco}"]):
