@@ -57,6 +57,10 @@ def img_to_base64(path):
     with open(path, "rb") as f:
         return base64.b64encode(f.read()).decode()
 
+path = 'logos/bradesco.png'
+
+print(os.path.isfile(path))
+
 st.set_page_config(page_title="Preços em tempo real - Bancos", layout="wide")
 st.title("📊 Preço em Tempo Real das Ações - Bancos B3")
 
