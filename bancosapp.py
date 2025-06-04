@@ -19,7 +19,7 @@ import time
 bancos = {
     'BBDC4.SA': {
         'empresa': 'Banco Bradesco',
-        'ticker': 'AZUL4',
+        'ticker': 'BBDC4',
         'logo_path': 'logos/bradesco.png'
     },
     'BBAS3.SA': {
