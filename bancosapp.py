@@ -56,34 +56,44 @@ refresh_interval = st.slider("⏱️ Atualizar a cada quantos segundos?", min_va
 
 placeholder = st.empty()
 
+# Cabeçalho
+col1, col2, col3, col4 = st.columns([1.5, 3, 2, 2])
+with col1: st.markdown("**LOGO**")
+with col2: st.markdown("**EMPRESA**")
+with col3: st.markdown("**TICKET**")
+with col4: st.markdown("**PREÇO DA AÇÃO (R$)**")
+
+st.markdown("---")
+
 while True:
     with placeholder.container():
-        # Cabeçalho normal
-        col1, col2, col3, col4 = st.columns([2, 3, 2, 3])
-        with col1: st.markdown("**LOGO**")
-        with col2: st.markdown("**EMPRESA**")
-        with col3: st.markdown("**TICKET**")
-        with col4: st.markdown("**PREÇO DA AÇÃO (R$)**")
-
-        st.markdown("---")
-
         for ticker, info in bancos.items():
             preco = buscar_preco(ticker)
-            cols = st.columns([2, 3, 2, 3])
+            img_b64 = img_to_base64(info['logo_path'])
 
-            with cols[0]:
-                # Logo com st.image (centraliza horizontalmente)
-                st.image(info['logo_path'], width=60, use_container_width=False)
-
-            # Nas outras colunas: usar div com flex para centralizar e fixar altura
-            for idx, valor in zip([1, 2, 3], [info['empresa'], info['ticket'], f"R$ {preco}"]):
-                with cols[idx]:
-                    st.markdown(
-                        f"""
-                        <div style="height:80px; display:flex; justify-content:center; align-items:center;">
-                            {valor}
-                        </div>
-                        """,
-                        unsafe_allow_html=True
-                    )
+            # Linha inteira com flexbox e altura fixa 80px
+            linha_html = f"""
+            <div style="
+                display:flex; 
+                align-items:center; 
+                justify-content:space-around; 
+                height:80px; 
+                border-bottom:1px solid #eee;
+                ">
+                
+                <div style="flex:1; text-align:center;">
+                    <img src="data:image/png;base64,{img_b64}" width="60" style="vertical-align:middle;"/>
+                </div>
+                <div style="flex:2; text-align:center; font-weight:600;">
+                    {info['empresa']}
+                </div>
+                <div style="flex:1; text-align:center;">
+                    {info['ticket']}
+                </div>
+                <div style="flex:1; text-align:center;">
+                    R$ {preco}
+                </div>
+            </div>
+            """
+            st.markdown(linha_html, unsafe_allow_html=True)
     time.sleep(refresh_interval)
