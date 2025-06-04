@@ -54,25 +54,61 @@ st.title("📊 Preço em Tempo Real das Ações - Bancos B3")
 
 refresh_interval = st.slider("⏱️ Atualizar a cada quantos segundos?", min_value=1, max_value=60, value=10)
 
-# Cabeçalho da tabela
-col1, col2, col3, col4 = st.columns([1.5, 3, 2, 2])
-with col1: st.markdown("**LOGO**")
-with col2: st.markdown("**EMPRESA**")
-with col3: st.markdown("**TICKET**")
-with col4: st.markdown("**PREÇO DA AÇÃO (R$)**")
+placeholder = st.empty()
 
-# Linhas
-for ticker, info in bancos.items():
-    preco = buscar_preco(ticker)
+while True:
+    with placeholder.container():
+        # Cabeçalho - normal, sem alteração
+        col1, col2, col3, col4 = st.columns([2, 3, 2, 3])
+        with col1: st.markdown("**LOGO**")
+        with col2: st.markdown("**EMPRESA**")
+        with col3: st.markdown("**TICKET**")
+        with col4: st.markdown("**PREÇO DA AÇÃO (R$)**")
 
-    col1, col2, col3, col4 = st.columns([1.5, 3, 2, 2])
-    with col1:
-        st.image(info["logo_path"], width=100)
-    with col2:
-        st.write(info["empresa"])
-    with col3:
-        st.write(info["ticket"])
-    with col4:
-        st.write(f"R$ {preco}")
+        st.markdown("---")
 
+        # Linhas
+        for ticker, info in bancos.items():
+            preco = buscar_preco(ticker)
+            cols = st.columns([2, 3, 2, 3])
+            # Logo com imagem do arquivo
+            with cols[0]:
+                st.markdown(
+                    f"""
+                    <div style="height:80px; display:flex; justify-content:center; align-items:center;">
+                        <img src="{info['logo_path']}" width="60" />
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+            # Empresa centralizada
+            with cols[1]:
+                st.markdown(
+                    f"""
+                    <div style="height:80px; display:flex; justify-content:center; align-items:center;">
+                        {info['empresa']}
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+            # Ticket centralizado
+            with cols[2]:
+                st.markdown(
+                    f"""
+                    <div style="height:80px; display:flex; justify-content:center; align-items:center;">
+                        {info['ticket']}
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+            # Preço centralizado
+            with cols[3]:
+                st.markdown(
+                    f"""
+                    <div style="height:80px; display:flex; justify-content:center; align-items:center;">
+                        R$ {preco}
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
     time.sleep(refresh_interval)
