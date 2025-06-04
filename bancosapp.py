@@ -15,6 +15,13 @@ import requests
 from io import BytesIO
 import time
 
+def img_to_base64(path):
+    if not os.path.isfile(path):
+        st.error(f"Arquivo não encontrado: {path}")
+        return ""
+    with open(path, "rb") as img_file:
+        return base64.b64encode(img_file.read()).decode()
+
 # Dicionário com dados dos bancos
 bancos = {
     'BBDC4.SA': {
