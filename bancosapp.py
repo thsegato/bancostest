@@ -94,3 +94,4 @@ while True:
             st.markdown(f"<div style='display:flex; align-items:center; height:100%; font-size:24px;'>{tendencia}</div>", unsafe_allow_html=True)
 
     time.sleep(refresh_interval)
+    st.experimental_rerun()  # reinicia o app para atualizar a tabela
