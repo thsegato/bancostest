@@ -61,21 +61,29 @@ with col2: st.markdown("**EMPRESA**")
 with col3: st.markdown("**TICKET**")
 with col4: st.markdown("**PREÇO DA AÇÃO (R$)**")
 
-# Linhas — com espaçamento vertical entre elas
-for ticker, info in bancos.items():
-    preco = buscar_preco(ticker)
+# Função para criar HTML centralizado verticalmente para textos das colunas
+def centralize_text(text):
+    return f"""
+    <div style='display:flex; align-items:center; height:100%; justify-content:center;'>
+        <span style='font-size:16px;'>{text}</span>
+    </div>
+    """
 
-    col1, col2, col3, col4 = st.columns([1.5, 3, 2, 2])
-    with col1:
-        st.image(info["logo_path"], width=100)
-    with col2:
-        st.write(info["empresa"])
-    with col3:
-        st.write(info["ticket"])
-    with col4:
-        st.write(f"R$ {preco}")
-    
-    st.markdown("<br>", unsafe_allow_html=True)  # espaçamento extra entre linhas, só aqui
-    # ou use st.write("") para um espaço simples, se preferir
+while True:
+    for ticker, info in bancos.items():
+        preco = buscar_preco(ticker)
+
+        col1, col2, col3, col4 = st.columns([1.5,3,2,2])
+
+        # Logo (imagem normal)
+        if os.path.isfile(info["logo_path"]):
+            st_img = col1.image(info["logo_path"], width=100)
+        else:
+            col1.write("Logo não disponível")
+
+        # Textos centralizados verticalmente e horizontalmente
+        col2.markdown(centralize_text(info["empresa"]), unsafe_allow_html=True)
+        col3.markdown(centralize_text(info["ticket"]), unsafe_allow_html=True)
+        col4.markdown(centralize_text(f"R$ {preco}"), unsafe_allow_html=True)
 
     time.sleep(refresh_interval)
