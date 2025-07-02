@@ -60,26 +60,6 @@ placeholder = st.empty()
 # Dicionário para guardar o último preço conhecido
 precos_anteriores = {ticker: None for ticker in bancos.keys()}
 
-def mostrar_historico_bbdc4():
-    st.header("📈 Histórico do Banco Bradesco - últimos 5 minutos")
-
-    try:
-        ticker = 'BBDC4.SA'
-        stock = yf.Ticker(ticker)
-        hist = stock.history(period="5m", interval="1m")
-
-        if not hist.empty:
-            df = hist[['Close']].rename(columns={"Close": "Preço"})
-            st.line_chart(df)
-        else:
-            st.write("Sem dados recentes para exibir o histórico.")
-    except Exception as e:
-        st.write("Erro ao obter dados:", e)
-
-# Depois do título
-if st.checkbox("📊 Mostrar histórico de 5 minutos do Banco Bradesco"):
-    mostrar_historico_bbdc4()
-
 while True:
     with placeholder.container():
         # Cabeçalho da tabela
@@ -117,5 +97,25 @@ while True:
                 st.markdown(f"<div style='display:flex; align-items:center; height:100%;'>R$ {preco_atual}</div>", unsafe_allow_html=True)
             with col5:
                 st.markdown(f"<div style='display:flex; align-items:center; height:100%; font-size:24px;'>{tendencia}</div>", unsafe_allow_html=True)
+
+def mostrar_historico_bbdc4():
+    st.header("📈 Histórico do Banco Bradesco - últimos 5 minutos")
+
+    try:
+        ticker = 'BBDC4.SA'
+        stock = yf.Ticker(ticker)
+        hist = stock.history(period="5m", interval="1m")
+
+        if not hist.empty:
+            df = hist[['Close']].rename(columns={"Close": "Preço"})
+            st.line_chart(df)
+        else:
+            st.write("Sem dados recentes para exibir o histórico.")
+    except Exception as e:
+        st.write("Erro ao obter dados:", e)
+
+# Depois do título
+if st.checkbox("📊 Mostrar histórico de 5 minutos do Banco Bradesco"):
+    mostrar_historico_bbdc4()
 
     time.sleep(refresh_interval)
