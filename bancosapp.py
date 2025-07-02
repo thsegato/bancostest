@@ -60,6 +60,7 @@ placeholder = st.empty()
 # Dicionário para guardar o último preço conhecido
 precos_anteriores = {ticker: None for ticker in bancos.keys()}
 
+pip install openai
 from openai import OpenAI
 import os
 
