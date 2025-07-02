@@ -98,9 +98,34 @@ while True:
             with col5:
                 st.markdown(f"<div style='display:flex; align-items:center; height:100%; font-size:24px;'>{tendencia}</div>", unsafe_allow_html=True)
 
+from openai import OpenAI
+import os
+
+# configure sua chave
+os.environ["OPENAI_API_KEY"] = "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"
+client = OpenAI()
+
+def analisar_bbdc4_com_openai(df):
+    csv_text = df.to_csv(index=True)
+
+    prompt = f"""
+Abaixo está o histórico do preço de fechamento da ação BBDC4 nos últimos 5 minutos (1 minuto por linha):
+{csv_text}
+
+Com base nesses dados, faça uma análise muito curta do comportamento do preço, diga se parece ter tendência de alta ou baixa e, principalmente, dê uma recomendação clara:
+- Escreva no final apenas "RECOMENDAÇÃO: SIM" se valeria a pena comprar agora visando o próximo 5 minutos.
+- Ou escreva apenas "RECOMENDAÇÃO: NÃO" se não vale a pena comprar.
+"""
+
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[{"role": "user", "content": prompt}]
+    )
+
+    return response.choices[0].message.content
+
 def mostrar_historico_bbdc4():
     st.header("📈 Histórico do Banco Bradesco - últimos 5 minutos")
-
     try:
         ticker = 'BBDC4.SA'
         stock = yf.Ticker(ticker)
@@ -109,13 +134,27 @@ def mostrar_historico_bbdc4():
         if not hist.empty:
             df = hist[['Close']].rename(columns={"Close": "Preço"})
             st.line_chart(df)
+
+            if st.button("🔎 Pedir análise e recomendação da IA"):
+                with st.spinner("IA está analisando o histórico..."):
+                    analise = analisar_bbdc4_com_openai(df)
+
+                st.subheader("📊 Análise da IA")
+                st.write(analise)
+
+                # Procurar a recomendação final
+                if "RECOMENDAÇÃO: SIM" in analise.upper():
+                    st.success("✅ RECOMENDAÇÃO FINAL DA IA: SIM")
+                elif "RECOMENDAÇÃO: NÃO" in analise.upper():
+                    st.warning("🚫 RECOMENDAÇÃO FINAL DA IA: NÃO")
+                else:
+                    st.info("ℹ️ IA não deu uma recomendação clara.")
         else:
             st.write("Sem dados recentes para exibir o histórico.")
     except Exception as e:
-        st.write("Erro ao obter dados:", e)
-
-# Depois do título
-if st.checkbox("📊 Mostrar histórico de 5 minutos do Banco Bradesco"):
-    mostrar_historico_bbdc4()
+        st.error(f"Erro ao obter dados: {e}")
 
     time.sleep(refresh_interval)
+
+if st.checkbox("📊 Mostrar histórico e recomendação para o Banco Bradesco"):
+    mostrar_historico_bbdc4()
