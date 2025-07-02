@@ -18,7 +18,7 @@ from openai import OpenAI
 import os
 
 # configure sua chave
-os.environ["OPENAI_API_KEY"] = "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"
+os.environ["OPENAI_API_KEY"] = "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"
 client = OpenAI()
 
 # Dicionário com dados dos bancos
