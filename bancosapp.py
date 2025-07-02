@@ -125,7 +125,8 @@ refresh_interval = st.slider("⏱️ Atualizar a cada quantos segundos?", min_va
 placeholder = st.empty()
 
 # Dicionário para guardar o último preço conhecido e evitar piscar a tendência
-precos_anteriores = {ticker: None for ticker in bancos.keys()}
+if 'precos_anteriores' not in st.session_state:
+    st.session_state.precos_anteriores = {ticker: None for ticker in bancos.keys()}
 
 # Exibe a seção de análise da IA para o Bradesco
 mostrar_historico_e_analise('BBDC4.SA', 'Banco Bradesco')
