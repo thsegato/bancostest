@@ -90,7 +90,7 @@ def mostrar_historico_e_analise(ticker_analise, nome_empresa):
     st.header(f"📈 Análise de Curto Prazo: {nome_empresa}")
     
     # Busca um período maior para ter um gráfico mais útil (ex: últimos 60 minutos)
-    hist = yf.Ticker(ticker_analise).history(period="60m", interval="1m")
+    hist = yf.Ticker(ticker_analise).history(period="10m", interval="1m")
 
     if not hist.empty:
         df = hist[['Close']].rename(columns={"Close": "Preço (R$)"})
