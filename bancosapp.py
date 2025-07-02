@@ -62,7 +62,7 @@ def analisar_historico_com_openai(df, ticker):
     csv_text = df.to_csv(index=True)
     prompt = f"""
     Aja como um analista de trading de curto prazo.
-    Abaixo está o histórico de preço de fechamento da ação {ticker} a cada minuto, nos últimos minutos:
+    Abaixo está o histórico de preço de fechamento da ação {ticker} a cada minuto, nos últimos 10 minutos:
     ---
     {csv_text}
     ---
@@ -89,7 +89,7 @@ def mostrar_historico_e_analise(ticker_analise, nome_empresa):
     """Exibe o gráfico de histórico e o botão para análise da IA."""
     st.header(f"📈 Análise de Curto Prazo: {nome_empresa}")
     
-    # Busca um período maior para ter um gráfico mais útil (ex: últimos 60 minutos)
+    # Busca um período maior para ter um gráfico mais útil (ex: últimos 10 minutos)
     hist = yf.Ticker(ticker_analise).history(period="10m", interval="1m")
 
     if not hist.empty:
@@ -99,7 +99,7 @@ def mostrar_historico_e_analise(ticker_analise, nome_empresa):
         if st.button(f"🔎 Analisar {ticker_analise} com IA"):
             # Para a análise, usamos apenas os últimos 5 minutos de dados
             df_analise = df.tail(5)
-            with st.spinner("IA analisando os últimos 5 minutos de dados..."):
+            with st.spinner("IA analisando os últimos 10 minutos de dados..."):
                 analise = analisar_historico_com_openai(df_analise, ticker_analise)
             
             st.subheader("🤖 Análise da IA")
