@@ -17,9 +17,12 @@ import time
 from openai import OpenAI
 import os
 
-# configure sua chave
-os.environ["OPENAI_API_KEY"] = "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"
-client = OpenAI()
+# Instancia o cliente da OpenAI de forma segura usando os segredos do Streamlit
+try:
+    client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+except Exception as e:
+    st.error("Chave da API da OpenAI não encontrada. Por favor, configure o arquivo .streamlit/secrets.toml.")
+    st.stop() # Interrompe a execução se a chave não for encontrada
 
 # Dicionário com dados dos bancos
 bancos = {
@@ -55,49 +58,63 @@ def buscar_preco(ticker):
         pass
     return "N/A"
 
-# Função para IA analisar o histórico
-def analisar_bbdc4_com_openai(df):
+def analisar_historico_com_openai(df, ticker):
+    """Envia o histórico de preços para a IA e retorna a análise."""
     csv_text = df.to_csv(index=True)
     prompt = f"""
-Abaixo o histórico do preço de fechamento do BBDC4 nos últimos 5 minutos:
-{csv_text}
+    Aja como um analista de trading de curto prazo.
+    Abaixo está o histórico de preço de fechamento da ação {ticker} a cada minuto, nos últimos minutos:
+    ---
+    {csv_text}
+    ---
+    Com base exclusivamente nesta curta tendência de preços, faça uma análise técnica muito breve (1-2 linhas) e objetiva.
+    Ao final, determine se há uma indicação de COMPRA ou VENDA para os próximos 5 minutos.
 
-Faça uma análise muito curta do comportamento e no final diga se vale a pena comprar nos próximos 5 minutos.
+    Sua resposta final DEVE conter apenas uma das seguintes linhas, sem texto adicional:
+    RECOMENDAÇÃO: COMPRAR
+    ou
+    RECOMENDAÇÃO: VENDER
+    ou
+    RECOMENDAÇÃO: MANTER
+    """
+    try:
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": prompt}]
+        )
+        return response.choices[0].message.content
+    except Exception as e:
+        return f"Erro ao contatar a API da OpenAI: {e}"
 
-No final, escreva apenas uma linha assim:
-RECOMENDAÇÃO: SIM
-ou
-RECOMENDAÇÃO: NÃO
-"""
-    response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=[{"role": "user", "content": prompt}]
-    )
-    return response.choices[0].message.content
-
-# Função para mostrar histórico
-def mostrar_historico_bbdc4():
-    st.header("📈 Histórico Banco Bradesco - últimos 5 minutos")
-    ticker = 'BBDC4.SA'
-    stock = yf.Ticker(ticker)
-    hist = stock.history(period="5m", interval="1m")
+def mostrar_historico_e_analise(ticker_analise, nome_empresa):
+    """Exibe o gráfico de histórico e o botão para análise da IA."""
+    st.header(f"📈 Análise de Curto Prazo: {nome_empresa}")
+    
+    # Busca um período maior para ter um gráfico mais útil (ex: últimos 60 minutos)
+    hist = yf.Ticker(ticker_analise).history(period="60m", interval="1m")
 
     if not hist.empty:
-        df = hist[['Close']].rename(columns={"Close": "Preço"})
+        df = hist[['Close']].rename(columns={"Close": "Preço (R$)"})
         st.line_chart(df)
 
-        if st.button("🔎 Pedir análise da IA"):
-            with st.spinner("IA analisando..."):
-                analise = analisar_bbdc4_com_openai(df)
-            st.subheader("📊 Análise da IA")
+        if st.button(f"🔎 Analisar {ticker_analise} com IA"):
+            # Para a análise, usamos apenas os últimos 5 minutos de dados
+            df_analise = df.tail(5)
+            with st.spinner("IA analisando os últimos 5 minutos de dados..."):
+                analise = analisar_historico_com_openai(df_analise, ticker_analise)
+            
+            st.subheader("🤖 Análise da IA")
             st.write(analise)
             
-            if "RECOMENDAÇÃO: SIM" in analise.upper():
-                st.success("✅ RECOMENDAÇÃO FINAL DA IA: SIM")
-            elif "RECOMENDAÇÃO: NÃO" in analise.upper():
-                st.warning("🚫 RECOMENDAÇÃO FINAL DA IA: NÃO")
+            # Extrai a recomendação final de forma mais robusta
+            if "COMPRAR" in analise.upper():
+                st.success("✅ RECOMENDAÇÃO FINAL DA IA: COMPRAR")
+            elif "VENDER" in analise.upper():
+                st.error("❌ RECOMENDAÇÃO FINAL DA IA: VENDER")
+            elif "MANTER" in analise.upper():
+                st.warning("️neutral_face: RECOMENDAÇÃO FINAL DA IA: MANTER/NEUTRO")
             else:
-                st.info("ℹ️ IA não deu recomendação clara.")
+                st.info("ℹ️ A IA não forneceu uma recomendação clara.")
     else:
         st.write("Sem dados recentes para exibir o histórico.")
 
@@ -108,8 +125,14 @@ refresh_interval = st.slider("⏱️ Atualizar a cada quantos segundos?", min_va
 # Placeholder para atualização da tabela
 placeholder = st.empty()
 
-# Dicionário para guardar o último preço conhecido
-precos_anteriores = {ticker: None for ticker in bancos.keys()}
+# Dicionário para guardar o último preço conhecido e evitar piscar a tendência
+if 'precos_anteriores' not in st.session_state:
+    st.session_state.precos_anteriores = {ticker: None for ticker in bancos.keys()}
+
+# Exibe a seção de análise da IA para o Bradesco
+mostrar_historico_e_analise('BBDC4.SA', 'Banco Bradesco')
+
+st.header("Monitor de Preços em Tempo Real")
 
 while True:
     with placeholder.container():
